@@ -1,6 +1,7 @@
 # A minimal application for server.py (WSGI). It keeps no state between
 # requests: everything a request needs is in environ (see docs/design.md).
 import html
+import sys
 import urllib.parse
 
 
@@ -10,6 +11,6 @@ def application(environ, start_response):
 	body = "<!DOCTYPE html>\n<p>Hello, %s (from %s)</p>\n" % (
 		html.escape(name), html.escape(environ.get("REMOTE_ADDR", "")))
 	# something to do after the answer has been sent (a notice, a log line)
-	environ["pyweb.later"].append((print, ("hello was shown",)))
+	environ["pyweb.later"].append((sys.stderr.write, ("hello was shown\n",)))	# journalctl -u pyweb
 	start_response("200 OK", [("Content-Type", "text/html; charset=UTF-8")])
 	return [body.encode("utf-8")]
