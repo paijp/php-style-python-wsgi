@@ -1,0 +1,18 @@
+[Unit]
+Description=pyweb (WSGI applications, started by pyweb.socket)
+Requires=pyweb.socket
+After=pyweb.socket
+
+[Service]
+User=apache
+Group=apache
+UMask=0007
+Environment=PYWEB_CONFIG=/etc/pyweb/web.toml
+ExecStart=/usr/bin/python3 -I /opt/pyweb/server.py
+# it ends itself after `idle` seconds; the socket starts it again
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes

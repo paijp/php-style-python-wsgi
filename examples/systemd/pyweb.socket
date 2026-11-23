@@ -1,0 +1,15 @@
+# nginx connects to this socket; systemd starts pyweb.service at the first
+# connection. While the service is stopped or restarts, connections wait here.
+[Unit]
+Description=pyweb socket
+
+[Socket]
+ListenStream=/run/pyweb.sock
+# only nginx (group) and the server (user) can connect
+SocketUser=apache
+SocketGroup=nginx
+SocketMode=0660
+Backlog=64
+
+[Install]
+WantedBy=sockets.target

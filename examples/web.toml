@@ -1,0 +1,21 @@
+# Settings of server.py (PYWEB_CONFIG, default /etc/pyweb/web.toml).
+# Owned by root (or the deploying user) and not writable by the user the
+# server runs as: it decides which code runs.
+
+idle = 60			# seconds without a request, then the process ends (socket activation only)
+threads = 10			# requests handled at the same time; the next ones wait in the socket
+max_body = 1048576		# bytes of a request body (1 MB) unless an application says more
+path = ["/opt/apps"]		# added to sys.path: "hello.app" is /opt/apps/hello/app.py
+
+# prefix: the path itself, or below it ("/hello/" covers "/hello/x";
+# "/old/index.php" also covers "/old/index.php/more"). Longest first is up to you:
+# the first match wins. A path that matches no prefix is 404.
+[[app]]
+prefix = "/hello/"
+app = "hello.app:application"
+
+# an old PHP URL kept working: the application gets PATH_INFO and the query
+[[app]]
+prefix = "/old/index.php"
+app = "hello.app:application"
+max_body = 67108864		# 64 MB for this one (uploads)
